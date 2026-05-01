@@ -37,7 +37,15 @@ async def get_db() -> AsyncSession:
 
 
 async def init_db():
+    from sqlalchemy import text
+
     async with engine.begin() as conn:
-        # Drop and recreate all tables for clean schema (safe for fresh deployments)
-        await conn.run_sync(Base.metadata.drop_all)
+        # Create enum types if they don't exist (avoids conflict on restart)
+        for enum_name, values in [
+            ("plantier", "'free','pro','enterprise'"),
+            ("leadstatus", "'new','contacted','qualified','converted','dismissed'"),
+        ]:
+            await conn.execute(text(
+                f"DO $$ BEGIN CREATE TYPE {enum_name} AS ENUM ({values}); EXCEPTION WHEN duplicate_object THEN NULL; END $$"
+            ))
         await conn.run_sync(Base.metadata.create_all)
