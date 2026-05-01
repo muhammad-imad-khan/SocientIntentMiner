@@ -1,0 +1,3 @@
+-- REFERENCE ONLY — schema is managed by SQLAlchemy models in models.py
+-- Tables: users, organizations, projects, leads
+-- See models.py for the authoritative schema definition.

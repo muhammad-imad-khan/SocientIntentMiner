@@ -1,0 +1,10 @@
+.env
+__pycache__/
+*.pyc
+node_modules/
+.next/
+*.log
+.DS_Store
+pgdata/
+.pytest_cache/
+test.db
