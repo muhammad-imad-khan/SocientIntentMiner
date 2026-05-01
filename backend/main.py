@@ -34,10 +34,23 @@ app = FastAPI(
     redoc_url="/redoc" if settings.DEBUG else None,
 )
 
-# CORS
+# CORS — support wildcard patterns for Vercel preview deploys
+def _expand_origins(origins: list[str]) -> list[str]:
+    expanded = []
+    for o in origins:
+        if "*" in o:
+            # CORSMiddleware needs allow_origin_regex for wildcards
+            pass
+        else:
+            expanded.append(o)
+    return expanded
+
+
+_has_wildcard = any("*" in o for o in settings.ALLOWED_ORIGINS)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.ALLOWED_ORIGINS,
+    allow_origins=_expand_origins(settings.ALLOWED_ORIGINS) if _has_wildcard else settings.ALLOWED_ORIGINS,
+    allow_origin_regex=r"https://.*\.vercel\.app" if _has_wildcard else None,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -55,7 +68,7 @@ async def global_exception_handler(request: Request, exc: Exception):
 
 
 # Routes
-prefix = settings.API_V1_PREFIX
+prefix = settings.API_PREFIX
 app.include_router(health.router)
 app.include_router(auth.router, prefix=f"{prefix}/auth")
 app.include_router(projects.router, prefix=f"{prefix}/projects")

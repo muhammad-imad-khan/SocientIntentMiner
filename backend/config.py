@@ -6,8 +6,8 @@ class Settings(BaseSettings):
     # App
     APP_NAME: str = "Social Intent Miner"
     DEBUG: bool = False
-    API_V1_PREFIX: str = "/api/v1"
-    ALLOWED_ORIGINS: list[str] = ["http://localhost:3000"]
+    API_PREFIX: str = "/api"
+    ALLOWED_ORIGINS: list[str] = ["http://localhost:3000", "https://*.vercel.app"]
 
     # Database
     DATABASE_URL: str = "postgresql+asyncpg://postgres:postgres@db:5432/social_intent_miner"

@@ -12,7 +12,7 @@ class TestSettings:
         s = Settings(JWT_SECRET="testsecret")
         assert s.APP_NAME == "Social Intent Miner"
         assert s.DEBUG is False
-        assert s.API_V1_PREFIX == "/api/v1"
+        assert s.API_PREFIX == "/api"
         assert s.JWT_ALGORITHM == "HS256"
         assert s.JWT_EXPIRY_HOURS == 24
         assert s.RATE_LIMIT_PER_MINUTE == 60
