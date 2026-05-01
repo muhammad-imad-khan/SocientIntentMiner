@@ -8,3 +8,5 @@ node_modules/
 pgdata/
 .pytest_cache/
 test.db
+.vercel
+.env*.local
