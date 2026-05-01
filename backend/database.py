@@ -37,10 +37,7 @@ async def get_db() -> AsyncSession:
 
 
 async def init_db():
-    from sqlalchemy import text
-
     async with engine.begin() as conn:
-        # Drop conflicting enum types so create_all can recreate them idempotently
-        for enum_name in ("plantier", "leadstatus"):
-            await conn.execute(text(f"DROP TYPE IF EXISTS {enum_name} CASCADE"))
+        # Drop and recreate all tables for clean schema (safe for fresh deployments)
+        await conn.run_sync(Base.metadata.drop_all)
         await conn.run_sync(Base.metadata.create_all)
